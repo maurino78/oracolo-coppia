@@ -7,235 +7,140 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F8F5FF; min-height: 100vh; }
-
   .header { background: linear-gradient(135deg, #E91E8C, #7C3AED); padding: 32px 24px; text-align: center; }
-  .header h1 { color: white; font-size: 28px; font-weight: 800; }
-  .header p { color: rgba(255,255,255,0.8); margin-top: 8px; font-size: 15px; }
-
+  .header h1 { color: white; font-size: 26px; font-weight: 800; }
+  .header p { color: rgba(255,255,255,0.8); margin-top: 8px; font-size: 14px; }
   .container { max-width: 480px; margin: 0 auto; padding: 24px 20px; }
-
-  .card { background: white; border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-  .card h2 { font-size: 16px; font-weight: 700; color: #1A1A2E; margin-bottom: 16px; }
-
-  .mood-grid { display: flex; gap: 8px; justify-content: space-between; margin-bottom: 8px; }
+  .card { background: white; border-radius: 20px; padding: 22px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .card h2 { font-size: 15px; font-weight: 700; color: #1A1A2E; margin-bottom: 16px; }
+  .partner-card { background: linear-gradient(135deg, #fff0f8, #f0eaff); border-radius: 20px; padding: 22px; margin-bottom: 16px; border: 2px solid rgba(124,58,237,0.15); }
+  .partner-card h2 { font-size: 15px; font-weight: 700; color: #7C3AED; margin-bottom: 12px; }
+  .partner-info { font-size: 15px; font-weight: 600; color: #1A1A2E; line-height: 1.8; }
+  .mood-grid { display: flex; gap: 8px; justify-content: space-between; }
   .mood-btn { flex: 1; background: #F8F5FF; border: 2px solid #E8E0F5; border-radius: 14px; padding: 10px 4px; text-align: center; cursor: pointer; transition: all 0.2s; }
-  .mood-btn span { display: block; font-size: 24px; }
+  .mood-btn span { display: block; font-size: 22px; }
   .mood-btn small { display: block; font-size: 9px; font-weight: 700; color: #666688; margin-top: 3px; }
-  .mood-btn.selected { border-color: currentColor; }
-
   .focus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .focus-btn { background: #F8F5FF; border: 2px solid #E8E0F5; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 13px; font-weight: 700; color: #444466; }
-  .focus-btn.selected { color: white; }
-
-  .energy-row { display: flex; align-items: center; gap: 12px; }
-  .energy-row label { font-size: 14px; font-weight: 600; color: #1A1A2E; white-space: nowrap; }
-  .energy-row input[type=range] { flex: 1; accent-color: #7C3AED; }
-  .energy-val { font-size: 14px; font-weight: 700; color: #7C3AED; min-width: 32px; }
-
-  .divider { text-align: center; font-size: 28px; margin: 8px 0; }
-
-  .btn { width: 100%; padding: 18px; border: none; border-radius: 18px; font-size: 16px; font-weight: 700; color: white; cursor: pointer; background: linear-gradient(135deg, #E91E8C, #7C3AED); box-shadow: 0 8px 20px rgba(124,58,237,0.35); transition: opacity 0.2s; }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* Risultato */
-  .result { display: none; }
-  .result-card { background: linear-gradient(135deg, #E91E8C, #7C3AED); border-radius: 24px; padding: 28px; color: white; margin-bottom: 16px; }
-  .result-card .badge { background: rgba(255,255,255,0.2); display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-bottom: 16px; }
-  .result-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
-  .result-card p { font-size: 14px; opacity: 0.85; line-height: 1.6; }
-  .affirmation { background: rgba(255,255,255,0.2); border-radius: 12px; padding: 14px; margin-top: 16px; font-style: italic; font-size: 14px; text-align: center; }
-
-  .action-card { background: white; border-radius: 16px; padding: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-  .action-icon { width: 44px; height: 44px; background: rgba(245,166,35,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-  .action-label { font-size: 10px; font-weight: 700; color: #999; letter-spacing: 1.5px; }
-  .action-text { font-size: 15px; font-weight: 600; color: #1A1A2E; margin-top: 4px; }
-
-  .store-btn { width: 100%; padding: 16px; border: 2px solid rgba(124,58,237,0.3); border-radius: 16px; background: white; font-size: 15px; font-weight: 700; color: #7C3AED; cursor: pointer; margin-bottom: 12px; }
-
-  .loader { text-align: center; padding: 40px; display: none; }
-  .orb { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, #E91E8C, #7C3AED); margin: 0 auto 24px; animation: pulse 1.2s ease-in-out infinite alternate; box-shadow: 0 0 40px rgba(124,58,237,0.4); font-size: 36px; display: flex; align-items: center; justify-content: center; }
-  @keyframes pulse { from { transform: scale(0.85); } to { transform: scale(1.15); } }
-  .loader p { color: #555577; font-size: 16px; font-weight: 500; }
-
-  .branding { text-align: center; color: #999; font-size: 12px; margin-top: 8px; padding-bottom: 32px; }
+  .focus-btn { background: #F8F5FF; border: 2px solid #E8E0F5; border-radius: 12px; padding: 13px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 13px; font-weight: 700; color: #444466; }
+  .btn { width: 100%; padding: 18px; border: none; border-radius: 18px; font-size: 16px; font-weight: 700; color: white; cursor: pointer; background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 8px 20px rgba(37,211,102,0.35); margin-bottom: 12px; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .btn-store { width: 100%; padding: 16px; border: 2px solid rgba(124,58,237,0.3); border-radius: 16px; background: white; font-size: 14px; font-weight: 700; color: #7C3AED; cursor: pointer; }
+  .sent-card { display: none; background: linear-gradient(135deg, #25D366, #128C7E); border-radius: 20px; padding: 32px; text-align: center; color: white; }
+  .sent-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+  .sent-card p { opacity: 0.9; font-size: 15px; line-height: 1.5; }
+  .branding { text-align: center; color: #aaa; font-size: 12px; padding: 16px 0 32px; }
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1>💑 Sync di Coppia</h1>
-  <p>Il tuo partner ti ha invitato a sincronizzarvi</p>
+  <p id="header-sub">Il tuo partner ti ha invitato a sincronizzarvi</p>
 </div>
 
 <div class="container">
+  <div id="main-section">
 
-  <!-- FORM -->
-  <div id="form-section">
-    <!-- PARTNER (dati passati via URL) -->
-    <div class="card" id="partner-card" style="background: linear-gradient(135deg, #fff0f8, #f0eaff);">
-      <h2>💗 Il tuo partner si sente...</h2>
-      <div id="partner-info" style="color: #7C3AED; font-weight: 600; font-size: 15px;">Caricamento...</div>
+    <div class="partner-card">
+      <h2>💗 Il tuo partner si sente così oggi:</h2>
+      <div class="partner-info" id="partner-info">Caricamento...</div>
     </div>
 
-    <!-- IO -->
     <div class="card">
       <h2>👤 Come stai TU adesso?</h2>
-      <div class="mood-grid" id="my-moods">
-        <div class="mood-btn" onclick="selectMood(0)" style="--c:#6B9BD2"><span>😴</span><small>Stanco</small></div>
-        <div class="mood-btn" onclick="selectMood(1)" style="--c:#F5A623"><span>⚡</span><small>Carico</small></div>
-        <div class="mood-btn" onclick="selectMood(2)" style="--c:#E8615A"><span>😤</span><small>Stressato</small></div>
-        <div class="mood-btn" onclick="selectMood(3)" style="--c:#9B59B6"><span>🎨</span><small>Creativo</small></div>
-        <div class="mood-btn" onclick="selectMood(4)" style="--c:#2ECC71"><span>😌</span><small>Neutro</small></div>
+      <div class="mood-grid">
+        <div class="mood-btn" onclick="selectMood(0,'#6B9BD2')"><span>😴</span><small>Stanco</small></div>
+        <div class="mood-btn" onclick="selectMood(1,'#F5A623')"><span>⚡</span><small>Carico</small></div>
+        <div class="mood-btn" onclick="selectMood(2,'#E8615A')"><span>😤</span><small>Stressato</small></div>
+        <div class="mood-btn" onclick="selectMood(3,'#9B59B6')"><span>🎨</span><small>Creativo</small></div>
+        <div class="mood-btn" onclick="selectMood(4,'#2ECC71')"><span>😌</span><small>Neutro</small></div>
       </div>
     </div>
 
     <div class="card">
       <h2>🎯 Il tuo focus oggi</h2>
-      <div class="focus-grid" id="my-focuses">
-        <div class="focus-btn" onclick="selectFocus(0)" style="--c:#3498DB">💼 Lavoro</div>
-        <div class="focus-btn" onclick="selectFocus(1)" style="--c:#E91E8C">❤️ Relazioni</div>
-        <div class="focus-btn" onclick="selectFocus(2)" style="--c:#27AE60">🌿 Salute</div>
-        <div class="focus-btn" onclick="selectFocus(3)" style="--c:#F39C12">💰 Soldi</div>
+      <div class="focus-grid">
+        <div class="focus-btn" onclick="selectFocus(0,'#3498DB')">💼 Lavoro</div>
+        <div class="focus-btn" onclick="selectFocus(1,'#E91E8C')">❤️ Relazioni</div>
+        <div class="focus-btn" onclick="selectFocus(2,'#27AE60')">🌿 Salute</div>
+        <div class="focus-btn" onclick="selectFocus(3,'#F39C12')">💰 Soldi</div>
       </div>
     </div>
 
-    <button class="btn" id="genera-btn" onclick="generaSync()" disabled>
-      💑 Genera il vostro Sync
+    <button class="btn" id="invia-btn" onclick="inviaRisposta()" disabled>
+      💬 Manda risposta su WhatsApp
     </button>
-  </div>
 
-  <!-- LOADER -->
-  <div class="loader" id="loader">
-    <div class="orb">💑</div>
-    <p id="loader-msg">Analizzando le vostre energie...</p>
-  </div>
-
-  <!-- RISULTATO -->
-  <div class="result" id="result-section">
-    <div class="result-card" id="result-card">
-      <div class="badge">SYNC DI COPPIA</div>
-      <div style="font-size:36px; margin-bottom:12px" id="res-emoji">💑</div>
-      <h2 id="res-headline"></h2>
-      <p id="res-insight"></p>
-      <div class="affirmation" id="res-affirmation"></div>
-    </div>
-
-    <div class="action-card">
-      <div class="action-icon">⚡</div>
-      <div>
-        <div class="action-label">AZIONE DI COPPIA</div>
-        <div class="action-text" id="res-action"></div>
-      </div>
-    </div>
-
-    <button class="store-btn" onclick="openStore()">
+    <button class="btn-store" onclick="openStore()">
       📲 Scarica Oracolo Giornaliero
     </button>
-
-    <div class="branding">🔮 Oracolo Giornaliero — Sync di Coppia</div>
   </div>
 
+  <div class="sent-card" id="sent-card">
+    <div style="font-size:48px; margin-bottom:16px">✅</div>
+    <h2>Risposta inviata!</h2>
+    <p>Il tuo partner riceverà i tuoi dati su WhatsApp e genererà il vostro Sync di Coppia nell'app 🔮</p>
+    <div style="margin-top:20px; font-size:13px; opacity:0.8">Scarica anche tu l'app per ricevere il tuo Sync ogni giorno!</div>
+  </div>
+
+  <div class="branding">🔮 Oracolo Giornaliero</div>
 </div>
 
 <script>
-const GEMINI_KEY = '';
 const MOODS = ['Stanco','Carico','Stressato','Creativo','Neutro'];
 const FOCUSES = ['Lavoro','Relazioni','Salute','Soldi'];
-const MOOD_COLORS = ['#6B9BD2','#F5A623','#E8615A','#9B59B6','#2ECC71'];
-const FOCUS_COLORS = ['#3498DB','#E91E8C','#27AE60','#F39C12'];
-
 let myMood = null, myFocus = null;
-let partnerMood = '', partnerFocus = '', partnerEnergy = 5;
 
-// Leggi parametri URL
 const params = new URLSearchParams(window.location.search);
-partnerMood = params.get('mood') || 'Carico';
-partnerFocus = params.get('focus') || 'Lavoro';
-partnerEnergy = params.get('energy') || '7';
+const partnerMood = params.get('mood') || '';
+const partnerFocus = params.get('focus') || '';
+const partnerEnergy = params.get('energy') || '5';
+const partnerName = params.get('name') || 'Il tuo partner';
+const waNumber = params.get('wa') || '';
 
+document.getElementById('header-sub').textContent = partnerName + ' ti ha invitato a sincronizzarvi 💗';
 document.getElementById('partner-info').innerHTML =
-  `Si sente <b>${partnerMood}</b> • Focus su <b>${partnerFocus}</b> • Energia <b>⚡${partnerEnergy}/10</b>`;
+  '😊 Si sente: <b>' + partnerMood + '</b><br>🎯 Focus: <b>' + partnerFocus + '</b><br>⚡ Energia: <b>' + partnerEnergy + '/10</b>';
 
-function selectMood(i) {
+function selectMood(i, color) {
   myMood = i;
-  document.querySelectorAll('.mood-btn').forEach((b,j) => {
-    b.classList.toggle('selected', i===j);
-    b.style.background = i===j ? MOOD_COLORS[j] : '#F8F5FF';
-    b.style.borderColor = i===j ? MOOD_COLORS[j] : '#E8E0F5';
+  document.querySelectorAll('.mood-btn').forEach(function(b,j) {
+    b.style.background = i===j ? color : '#F8F5FF';
+    b.style.borderColor = i===j ? color : '#E8E0F5';
     b.querySelector('small').style.color = i===j ? 'white' : '#666688';
   });
   checkReady();
 }
 
-function selectFocus(i) {
+function selectFocus(i, color) {
   myFocus = i;
-  document.querySelectorAll('.focus-btn').forEach((b,j) => {
-    b.classList.toggle('selected', i===j);
-    b.style.background = i===j ? FOCUS_COLORS[j] : '#F8F5FF';
-    b.style.borderColor = i===j ? FOCUS_COLORS[j] : '#E8E0F5';
+  document.querySelectorAll('.focus-btn').forEach(function(b,j) {
+    b.style.background = i===j ? color : '#F8F5FF';
+    b.style.borderColor = i===j ? color : '#E8E0F5';
     b.style.color = i===j ? 'white' : '#444466';
   });
   checkReady();
 }
 
 function checkReady() {
-  document.getElementById('genera-btn').disabled = myMood === null || myFocus === null;
+  document.getElementById('invia-btn').disabled = myMood === null || myFocus === null;
 }
 
-const loaderMsgs = [
-  'Analizzando le vostre energie...',
-  'Trovando la vostra sinergia...',
-  'Calibrando il consiglio di coppia...',
-  'Il vostro Sync è quasi pronto...'
-];
-
-async function generaSync() {
-  document.getElementById('form-section').style.display = 'none';
-  document.getElementById('loader').style.display = 'block';
-
-  let mi = 0;
-  const interval = setInterval(() => {
-    if (mi < loaderMsgs.length - 1) mi++;
-    document.getElementById('loader-msg').textContent = loaderMsgs[mi];
-  }, 900);
-
-  const prompt = `Sei un coach di coppia esperto. Genera un consiglio di coppia in italiano.
-Persona 1: stato=${MOODS[myMood]}, focus=${FOCUSES[myFocus]}
-Persona 2: stato=${partnerMood}, focus=${partnerFocus}, energia=${partnerEnergy}/10
-Rispondi SOLO con JSON (niente backtick):
-{"headline":"titolo coppia max 7 parole","insight":"consiglio pratico 2-3 frasi","action":"azione da fare insieme max 12 parole","affirmation":"affermazione coppia max 10 parole","emoji":"emoji"}`;
-
-  let result = { headline:'Insieme siete invincibili', insight:'Le vostre energie si complementano perfettamente. Usate questa sinergia per affrontare insieme la giornata.', action:'Dedicate 10 minuti a parlarvi senza telefono', affirmation:'Insieme creiamo qualcosa di straordinario', emoji:'💑' };
-
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({contents:[{parts:[{text:prompt}]}], generationConfig:{temperature:0.8,maxOutputTokens:400}})
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const text = data.candidates[0].content.parts[0].text;
-      result = JSON.parse(text.replace(/```json|```/g,'').trim());
-    }
-  } catch(e) {}
-
-  await new Promise(r => setTimeout(r, 3500));
-  clearInterval(interval);
-
-  document.getElementById('loader').style.display = 'none';
-  document.getElementById('result-section').style.display = 'block';
-  document.getElementById('res-emoji').textContent = result.emoji || '💑';
-  document.getElementById('res-headline').textContent = result.headline || '';
-  document.getElementById('res-insight').textContent = result.insight || '';
-  document.getElementById('res-affirmation').textContent = `"${result.affirmation || ''}"`;
-  document.getElementById('res-action').textContent = result.action || '';
+function inviaRisposta() {
+  var myMoodLabel = MOODS[myMood];
+  var myFocusLabel = FOCUSES[myFocus];
+  var msg = '💑 *Sync di Coppia - Oracolo Giornaliero*\n\nHo inserito il mio stato!\n\n😊 Mi sento: *' + myMoodLabel + '*\n🎯 Focus: *' + myFocusLabel + '*\n\nOra apri l\'app e genera il nostro Sync! 🔮';
+  var url = waNumber
+    ? 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg)
+    : 'https://wa.me/?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+  document.getElementById('main-section').style.display = 'none';
+  document.getElementById('sent-card').style.display = 'block';
 }
 
 function openStore() {
   window.open('https://play.google.com/store/apps/details?id=com.oracolo.giornaliero', '_blank');
 }
 </script>
-
 </body>
 </html>
